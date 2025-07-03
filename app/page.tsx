@@ -11,6 +11,9 @@ import {
   Users,
   Zap
 } from "lucide-react";
+import Header from "@/components/Header";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const features = [
   {
@@ -75,9 +78,18 @@ const testimonials = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { userId } = await auth()
+
+  if (userId) {
+    redirect('/dashboard')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* Header Section */}
+      <Header isFixed={true} />
+
       {/* Hero Section */}
       <section className="px-4 py-20 lg:px-8 lg:py-32">
         <div className="max-w-7xl mx-auto">
@@ -240,7 +252,7 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
-                No credit card required 
+                No credit card required
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" />
